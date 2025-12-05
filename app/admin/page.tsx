@@ -1,3 +1,9 @@
+import { AdminPageWrapper } from "../components/admin/admin-page-wrapper";
+
 export default function AdminPage() {
-  return <div>Admin Page</div>;
+  return (
+    <AdminPageWrapper>
+        <section>Admin Page</section>
+    </AdminPageWrapper>
+  );
 }
