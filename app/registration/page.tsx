@@ -61,7 +61,7 @@ export default function RegistrationPage() {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black py-12 px-4 sm:px-6">
-            <main className="w-full max-w-2xl bg-white dark:bg-zinc-900 p-8 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
+            <main className="mx-auto max-w-5xl p-6 py-10 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
                 <header className="mb-8">
                     <h1 className="text-3xl font-bold text-black dark:text-white">Tournament Registration</h1>
                     <p className="mt-2 text-zinc-600 dark:text-zinc-400">
