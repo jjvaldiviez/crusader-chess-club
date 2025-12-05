@@ -15,13 +15,14 @@ export function NavBar() {
                         height={32}
                         priority
                     />
-                    <span className="text-lg font-bold text-black dark:text-white hidden sm:block">
-            Crusaders Chess
-          </span>
+                    <span className="text-lg font-bold text-black dark:text-white hidden sm:block">Crusaders Chess</span>
                 </Link>
 
                 {/* Navigation Links */}
                 <div className="flex items-center gap-6 text-sm font-medium">
+                    <Link href="/" className="text-zinc-600 transition-colors hover:text-black dark:text-white">
+                        Home
+                    </Link>
                     <Link
                         href="/about"
                         className="text-zinc-600 transition-colors hover:text-black dark:text-zinc-400 dark:hover:text-white"
