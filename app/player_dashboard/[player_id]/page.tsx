@@ -30,32 +30,35 @@ export default async function DashboardPage(
         player.uscf_expiration && new Date(player.uscf_expiration) < new Date();
 
     // Mock tournaments data
-    const upcomingTournaments = [
-        {
-            id: 1,
-            name: "Winter Open 2025",
-            date: "2025-01-15",
-            location: "Community Center",
-            status: "Registered",
-        },
-    ];
+    const upcomingTournaments = await db("tournaments as t")
+        .join("sections as s", "t.tournament_id", "s.tournament_id")
+        .join("section_players as sp", "s.section_id", "sp.section_id")
+        .select(
+            "t.tournament_id as id",
+            "t.name",
+            "t.start_date as date",
+            "t.location",
+            db.raw("'Registered' as status")
+        )
+        .where("sp.player_id", player_id)
+        .andWhere("t.start_date", ">=", new Date())
+        .groupBy("t.tournament_id") // Add groupBy to ensure unique tournaments
+        .orderBy("t.start_date", "asc");
 
-    const pastTournaments = [
-        {
-            id: 101,
-            name: "Fall Classic 2024",
-            date: "2024-11-20",
-            result: "3.5/5.0",
-            standing: "4th Place",
-        },
-        {
-            id: 102,
-            name: "Summer Rapid",
-            date: "2024-08-10",
-            result: "4.0/6.0",
-            standing: "8th Place",
-        },
-    ];
+    const pastTournaments = await db("tournaments as t")
+        .join("sections as s", "t.tournament_id", "s.tournament_id")
+        .join("section_players as sp", "s.section_id", "sp.section_id")
+        .select(
+            "t.tournament_id as id",
+            "t.name",
+            "t.start_date as date",
+            db.raw("'N/A' as result"), // Placeholder as games aggregation is complex without dedicated view
+            db.raw("'N/A' as standing")
+        )
+        .where("sp.player_id", player_id)
+        .andWhere("t.start_date", "<", new Date())
+        .groupBy("t.tournament_id") // Add groupBy here too
+        .orderBy("t.start_date", "desc");
 
     return (
         <AdminPageWrapper>
@@ -104,12 +107,12 @@ export default async function DashboardPage(
                             <div className="flex flex-col gap-4">
                                 {upcomingTournaments.map((t) => (
                                     <div
-                                        key={t.id}
+                                        key={`upcoming-tournament-${t.id}`}
                                         className="flex items-center justify-between rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
                                     >
                                         <div>
                                             <h3 className="font-semibold text-black dark:text-white">{t.name}</h3>
-                                            <p className="text-sm text-zinc-500">{t.date} • {t.location}</p>
+                                            <p className="text-sm text-zinc-500">{new Date(t.date).toLocaleDateString()} • {t.location}</p>
                                         </div>
                                         <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800 dark:bg-green-900/30 dark:text-green-400">
                     {t.status}

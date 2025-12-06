@@ -21,7 +21,7 @@ export function ParticipationModule({tournaments}: ParticipationModuleProps) {
                     </thead>
                     <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 bg-white dark:bg-zinc-900">
                     {tournaments.map((t: any) => (
-                        <ParticipationCard key={t.id} tournament={t}/>
+                        <ParticipationCard key={`past-tournament-${t.id}`} tournament={t}/>
                     ))}
                     </tbody>
                 </table>
