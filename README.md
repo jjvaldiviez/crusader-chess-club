@@ -39,3 +39,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ```bash
 docker compose -f local/docker-compose.yaml up -d
 ```
+```bash
+docker compose -f local/docker-compose.yaml down
+```
