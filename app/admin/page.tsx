@@ -1,5 +1,6 @@
 import { AdminPageWrapper } from "../components/admin/admin-page-wrapper";
-import db from "@/lib/server/db"; // <-- your knex instance
+import db from "@/lib/server/db";
+import {PlayerCard} from "@/app/components/admin/items/player-card"; // <-- your knex instance
 
 export default async function AdminPage() {
     // Get 5 most recent players
@@ -44,17 +45,7 @@ export default async function AdminPage() {
                                 <ul className="divide-y">
                                     {recentPlayers.map((player) => (
                                         <li key={player.player_id} className="py-2 flex justify-between items-center">
-                                            <div>
-                                                <p className="font-medium text-sm">
-                                                    {player.first_name} {player.last_name}
-                                                </p>
-                                                <p className="text-xs text-gray-500">
-                                                    USCF: {player.uscf_id || "N/A"}
-                                                </p>
-                                            </div>
-                                            <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                                                New
-                                            </span>
+                                            <PlayerCard player={player} />
                                         </li>
                                     ))}
                                 </ul>
