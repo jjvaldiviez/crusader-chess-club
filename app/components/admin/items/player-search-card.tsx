@@ -3,7 +3,7 @@ import React from "react";
 interface PlayerViewProps {
     player: any
 }
-export function PlayerCard({player}: PlayerViewProps) {
+export function PlayerSearchCard({player}: PlayerViewProps) {
     const isExpired =
         player.uscf_expiration && new Date(player.uscf_expiration) < new Date();
 
@@ -18,8 +18,8 @@ export function PlayerCard({player}: PlayerViewProps) {
             <p className="text-xs text-gray-500 flex items-center gap-2">
                 USCF EXP: {" "}
                 {player.uscf_expiration
-                                ? new Date(player.uscf_expiration).toLocaleDateString()
-                                : "N/A"}
+                    ? new Date(player.uscf_expiration).toLocaleDateString()
+                    : "N/A"}
                 {isExpired && (
                     <span className="text-xs bg-red-400 text-white px-2 py-1 rounded-full">Expired</span>
                 )}
