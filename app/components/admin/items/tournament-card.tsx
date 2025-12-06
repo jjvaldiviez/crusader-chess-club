@@ -6,8 +6,28 @@ interface TournamentViewProps {
 
 export function TournamentCard({tournament}: TournamentViewProps) {
     return (
-        <div>
-            <p className="font-medium text-sm">{tournament.name}</p>
-        </div>
-    )
+        tournament ? (
+            <div className="space-y-2">
+                <h4 className="text-xl font-bold text-primary">
+                    {tournament.name}
+                </h4>
+                <div className="text-sm text-gray-600 space-y-1">
+                    <p>
+                        📅{" "}
+                        {tournament.start_date
+                            ? new Date(tournament.start_date).toLocaleDateString()
+                            : "TBD"}
+                    </p>
+                    <p>📍 {tournament.location || "Online"}</p>
+                    <p>📊 {tournament.section_count} Sections</p>
+                    <p> {tournament.player_count} Registered Players</p>
+                </div>
+                <p className="text-sm mt-4 text-gray-500 line-clamp-3">
+                    {tournament.description}
+                </p>
+            </div>
+        ) : (
+            <p className="text-sm text-gray-500">No tournaments found.</p>
+        )
+    );
 }

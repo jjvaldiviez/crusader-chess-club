@@ -1,6 +1,7 @@
 import { AdminPageWrapper } from "../components/admin/admin-page-wrapper";
 import db from "@/lib/server/db";
-import {PlayerCard} from "@/app/components/admin/items/player-card"; // <-- your knex instance
+import {PlayerCard} from "@/app/components/admin/items/player-card";
+import {TournamentCard} from "@/app/components/admin/items/tournament-card"; // <-- your knex instance
 
 export default async function AdminPage() {
     // Get 5 most recent players
@@ -9,19 +10,21 @@ export default async function AdminPage() {
         .orderBy("player_id", "desc")
         .limit(5);
 
-    // Get most recent tournament + section count
-    const recentTournament = await db("tournaments as t")
+    const upcomingTournament = await db("tournaments as t")
         .leftJoin("sections as s", "t.tournament_id", "s.tournament_id")
+        .leftJoin("section_players as sp", "s.section_id", "sp.section_id")
         .select(
             "t.tournament_id",
             "t.name",
             "t.location",
             "t.description",
             "t.start_date",
-            db.raw("COUNT(s.section_id) as section_count")
+            db.raw("COUNT(DISTINCT s.section_id) as section_count"),
+            db.raw("COUNT(DISTINCT sp.player_id) as player_count")
         )
+        .where("t.start_date", ">=", new Date())
         .groupBy("t.tournament_id")
-        .orderBy("t.start_date", "desc")
+        .orderBy("t.start_date", "asc")
         .first();
 
     return (
@@ -56,30 +59,9 @@ export default async function AdminPage() {
                     {/* Recent Tournament Card */}
                     <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
                         <h3 className="text-lg font-semibold leading-none tracking-tight mb-4">
-                            Latest Tournament
+                            Upcoming Tournament
                         </h3>
-                        {recentTournament ? (
-                            <div className="space-y-2">
-                                <h4 className="text-xl font-bold text-primary">
-                                    {recentTournament.name}
-                                </h4>
-                                <div className="text-sm text-gray-600 space-y-1">
-                                    <p>
-                                        📅{" "}
-                                        {recentTournament.start_date
-                                            ? new Date(recentTournament.start_date).toLocaleDateString()
-                                            : "TBD"}
-                                    </p>
-                                    <p>📍 {recentTournament.location || "Online"}</p>
-                                    <p>📊 {recentTournament.section_count} Sections</p>
-                                </div>
-                                <p className="text-sm mt-4 text-gray-500 line-clamp-3">
-                                    {recentTournament.description}
-                                </p>
-                            </div>
-                        ) : (
-                            <p className="text-sm text-gray-500">No tournaments found.</p>
-                        )}
+                        <TournamentCard tournament={upcomingTournament}/>
                     </div>
                 </div>
             </div>
