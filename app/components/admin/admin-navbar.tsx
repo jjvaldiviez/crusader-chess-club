@@ -21,7 +21,7 @@ export function AdminNavBar() {
                 {/* Navigation Links */}
                 <div className="flex items-center gap-6 text-sm font-medium">
                     <Link href="/admin" className="text-zinc-600 transition-colors hover:text-black dark:text-white">
-                        Home
+                        Admin Dashboard
                     </Link>
                     <Link
                         href="/admin/tournament-manager"
