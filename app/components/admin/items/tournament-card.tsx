@@ -20,7 +20,7 @@ export function TournamentCard({tournament}: TournamentViewProps) {
                     </p>
                     <p>📍 {tournament.location || "Online"}</p>
                     <p>📊 {tournament.section_count} Sections</p>
-                    <p> {tournament.player_count} Registered Players</p>
+                    <p> {tournament.player_count || 0} Registered Players</p>
                 </div>
                 <p className="text-sm mt-4 text-gray-500 line-clamp-3">
                     {tournament.description}
