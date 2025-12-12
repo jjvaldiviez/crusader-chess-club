@@ -7,6 +7,8 @@ import {getPlayerDashboardData} from "@/app/helpers/player-dashboard-data";
 import {Modal} from "@/app/helpers/modal"
 import {PlayerDashboardView} from "@/app/components/player/player-dashboard-view";
 import {RegistrationsModule} from "@/app/components/admin/modules/registrations-module";
+import {AppDataSource} from "@/backend/data-source";
+import {Player} from "@/backend/entity/Player";
 
 export default async function PlayerManagerPage(props: {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>
@@ -18,29 +20,24 @@ export default async function PlayerManagerPage(props: {
     const pageSize = 10;
     const offset = (page - 1) * pageSize;
 
-    // Start building the query
-    const baseQuery = db("players");
+    const qb = AppDataSource.getRepository(Player).createQueryBuilder("p");
 
     // Apply search filter if query exists
     if (query) {
-        baseQuery.where((builder) => {
-            builder.where("first_name", "like", `%${query}%`)
-                .orWhere("last_name", "like", `%${query}%`)
-                .orWhere("uscf_id", "like", `%${query}%`);
-        });
+        qb.andWhere("p.first_name like :query or p.last_name like :query or p.uscf_id like :query", {query: `%${query}%`});
     }
 
     // Clone the base query to get the count of filtered items
-    const countResult = await baseQuery.clone().count("player_id as count").first();
-    const totalPlayers = countResult ? Number(countResult.count) : 0;
+
+    const totalPlayers = await qb.getCount();
     const totalPages = Math.ceil(totalPlayers / pageSize);
 
     // Get the actual data with pagination
-    const allPlayers = await baseQuery
-        .select("*")
-        .orderBy("player_id", "desc")
-        .limit(pageSize)
-        .offset(offset);
+    const allPlayers = await qb
+        .orderBy("p.last_name", "ASC")
+        .skip(offset)
+        .take(pageSize)
+        .getMany();
 
     // Fetch Modal Data if param exists
     let selectedPlayerData = null;
