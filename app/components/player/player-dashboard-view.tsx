@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { ParticipationModule } from "@/app/components/player/participation_module";
+import { ParticipationModule } from "@/app/components/player/modules/participation-module";
 
 interface PlayerDashboardViewProps {
     data: {
