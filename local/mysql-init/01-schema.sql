@@ -29,15 +29,6 @@ CREATE TABLE sections (
       FOREIGN KEY (tournament_id) REFERENCES tournaments(tournament_id)
 );
 
--- Many players can join many sections (many-to-many relationship).
-CREATE TABLE section_players (
-     section_id INT,
-     player_id INT,
-     PRIMARY KEY (section_id, player_id),
-     FOREIGN KEY (section_id) REFERENCES sections(section_id),
-     FOREIGN KEY (player_id) REFERENCES players(player_id)
-);
-
 -- Each game belongs to a section and has 2 players + results.
 CREATE TABLE games (
        game_id INT AUTO_INCREMENT PRIMARY KEY,

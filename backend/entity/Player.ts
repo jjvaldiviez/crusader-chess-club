@@ -4,9 +4,10 @@ import {
     Column,
     ManyToMany,
     OneToMany,
+    type Relation,
 } from "typeorm";
-import { Section } from "./Section";
-import { Game } from "./Game";
+import type { Section } from "./Section";
+import type { Game } from "./Game";
 
 @Entity({ name: "players" })
 export class Player {
@@ -28,12 +29,12 @@ export class Player {
     @Column({ name: "uscf_expiration", type: "date", nullable: true })
     uscfExpiration: string | null;
 
-    @ManyToMany(() => Section, (s) => s.players)
-    sections: Section[];
+    @ManyToMany("Section", "players")
+    sections: Relation<Section[]>;
 
-    @OneToMany(() => Game, (g) => g.whitePlayer)
-    gamesAsWhite: Game[];
+    @OneToMany("Game", "whitePlayer")
+    gamesAsWhite: Relation<Game[]>;
 
-    @OneToMany(() => Game, (g) => g.blackPlayer)
-    gamesAsBlack: Game[];
+    @OneToMany("Game", "blackPlayer")
+    gamesAsBlack: Relation<Game[]>;
 }

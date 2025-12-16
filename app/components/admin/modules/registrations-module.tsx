@@ -2,9 +2,10 @@ import React from "react";
 import Search from "@/app/components/admin/items/search-bar";
 import {PlayerSearchCard} from "@/app/components/admin/items/player-search-card";
 import {PagesBar} from "@/app/components/admin/items/pages-bar";
+import {Player} from "@/backend/entity/Player";
 
 interface RegistrationsModuleProps {
-    players: any,
+    players: Player[],
     page: any,
     totalPages: any,
     query: any
@@ -28,8 +29,8 @@ export function RegistrationsModule({players, page, totalPages, query}: Registra
                 ) : (
                     <>
                         <ul className="divide-y">
-                            {players.map((player: any) => (
-                                <li key={player.player_id} className="py-2 flex justify-between items-center">
+                            {players.map((player: Player) => (
+                                <li key={player.id} className="py-2 flex justify-between items-center">
                                     <PlayerSearchCard player={player} />
                                 </li>
                             ))}

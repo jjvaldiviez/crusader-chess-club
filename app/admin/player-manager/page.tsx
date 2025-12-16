@@ -7,7 +7,7 @@ import {getPlayerDashboardData} from "@/app/helpers/player-dashboard-data";
 import {Modal} from "@/app/helpers/modal"
 import {PlayerDashboardView} from "@/app/components/player/player-dashboard-view";
 import {RegistrationsModule} from "@/app/components/admin/modules/registrations-module";
-import {AppDataSource} from "@/backend/data-source";
+import {AppDataSource, getAppDataSource} from "@/backend/data-source";
 import {Player} from "@/backend/entity/Player";
 
 export default async function PlayerManagerPage(props: {
@@ -20,6 +20,7 @@ export default async function PlayerManagerPage(props: {
     const pageSize = 10;
     const offset = (page - 1) * pageSize;
 
+    const ds = await getAppDataSource();
     const qb = AppDataSource.getRepository(Player).createQueryBuilder("p");
 
     // Apply search filter if query exists
@@ -47,15 +48,6 @@ export default async function PlayerManagerPage(props: {
 
     return (
         <AdminPageWrapper>
-            {selectedPlayerData && (
-                <Modal>
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-bold">Player Details</h2>
-                    </div>
-                    <PlayerDashboardView data={selectedPlayerData} />
-                </Modal>
-            )}
-
             <div className="space-y-6">
                 <header>
                     <h1 className="text-2xl font-bold tracking-tight">Player Dashboard</h1>

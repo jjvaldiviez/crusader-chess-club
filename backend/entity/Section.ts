@@ -6,10 +6,11 @@ import {
     ManyToMany,
     JoinTable,
     OneToMany,
+    type Relation,
 } from "typeorm";
-import { Tournament } from "./Tournament";
-import { Player } from "./Player";
-import { Game } from "./Game";
+import type { Tournament } from "./Tournament";
+import type { Player } from "./Player";
+import type { Game } from "./Game";
 
 @Entity({ name: "sections" })
 export class Section {
@@ -19,19 +20,19 @@ export class Section {
     @Column({ name: "name", length: 100 })
     name: string;
 
-    @ManyToOne(() => Tournament, (t) => t.sections, {
+    @ManyToOne("Tournament", "sections", {
         onDelete: "CASCADE",
     })
-    tournament: Tournament;
+    tournament: Relation<Tournament>;
 
-    @ManyToMany(() => Player, (p) => p.sections)
+    @ManyToMany("Player", "sections")
     @JoinTable({
         name: "section_players",
         joinColumn: { name: "section_id", referencedColumnName: "id" },
         inverseJoinColumn: { name: "player_id", referencedColumnName: "id" },
     })
-    players: Player[];
+    players: Relation<Player[]>;
 
-    @OneToMany(() => Game, (g) => g.section)
-    games: Game[];
+    @OneToMany("Game", "section")
+    games: Relation<Game[]>;
 }

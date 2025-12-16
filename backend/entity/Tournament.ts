@@ -3,8 +3,9 @@ import {
     PrimaryGeneratedColumn,
     Column,
     OneToMany,
+    type Relation,
 } from "typeorm";
-import { Section } from "./Section";
+import type { Section } from "./Section";
 
 @Entity({ name: "tournaments" })
 export class Tournament {
@@ -26,6 +27,6 @@ export class Tournament {
     @Column({ name: "end_date", type: "date" })
     endDate: string;
 
-    @OneToMany(() => Section, (s) => s.tournament)
-    sections: Section[];
+    @OneToMany("Section", "tournament")
+    sections: Relation<Section[]>;
 }

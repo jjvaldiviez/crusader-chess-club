@@ -3,9 +3,10 @@ import {
     PrimaryGeneratedColumn,
     Column,
     ManyToOne,
+    type Relation,
 } from "typeorm";
-import { Section } from "./Section";
-import { Player } from "./Player";
+import type { Section } from "./Section";
+import type { Player } from "./Player";
 
 export type GameResult = "1-0" | "0-1" | "0.5-0.5";
 
@@ -14,23 +15,23 @@ export class Game {
     @PrimaryGeneratedColumn({ name: "game_id" })
     id: number;
 
-    @ManyToOne(() => Section, (s) => s.games, {
+    @ManyToOne("Section", "games", {
         onDelete: "CASCADE",
     })
-    section: Section;
+    section: Relation<Section>;
 
     @Column({ name: "round_number" })
     roundNumber: number;
 
-    @ManyToOne(() => Player, (p) => p.gamesAsWhite, {
+    @ManyToOne("Player", "gamesAsWhite", {
         onDelete: "CASCADE",
     })
-    whitePlayer: Player;
+    whitePlayer: Relation<Player>;
 
-    @ManyToOne(() => Player, (p) => p.gamesAsBlack, {
+    @ManyToOne("Player", "gamesAsBlack", {
         onDelete: "CASCADE",
     })
-    blackPlayer: Player;
+    blackPlayer: Relation<Player>;
 
     @Column({
         type: "enum",
