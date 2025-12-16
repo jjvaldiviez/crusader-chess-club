@@ -1,8 +1,9 @@
 import React from 'react';
 import {ParticipationCard} from "@/app/components/player/items/participation_card";
+import {Registration} from "@/backend/entity/Registration";
 
 interface ParticipationModuleProps {
-    tournaments: any
+    tournaments: Registration[]
 }
 
 export function ParticipationModule({tournaments}: ParticipationModuleProps) {
@@ -20,8 +21,9 @@ export function ParticipationModule({tournaments}: ParticipationModuleProps) {
                     </tr>
                     </thead>
                     <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 bg-white dark:bg-zinc-900">
-                    {tournaments.map((t: any) => (
-                        <ParticipationCard key={`past-tournament-${t.id}`} tournament={t}/>
+                    {tournaments.map((r: Registration
+                    ) => (
+                        <ParticipationCard key={`past-tournament-${r.id}`} tournament={r}/>
                     ))}
                     </tbody>
                 </table>

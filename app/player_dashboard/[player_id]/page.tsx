@@ -6,6 +6,9 @@ import db from "@/lib/server/db";
 import React from "react";
 import { PlayerSnapshot } from "@/app/components/player/modules/player-snapshot";
 import {UpcomingTournaments} from "@/app/components/player/modules/upcoming-tournament-module";
+import {getAppDataSource} from "@/backend/data-source";
+import {Player} from "@/backend/entity/Player";
+import {Registration} from "@/backend/entity/Registration";
 
 export default async function DashboardPage(
     {
@@ -14,57 +17,48 @@ export default async function DashboardPage(
         params: Promise<{player_id: string}>
     }
 ) {
-    const player_id_object = await params
-    let player_id = player_id_object.player_id
 
-    console.log(player_id);
+    const ds = await getAppDataSource();
 
-    const player = await db("players")
-        .select("*")
-        .where("player_id", Number(player_id)) // Ensure number
-        .first(); // Ensure called
+    const playerRepo = ds.getRepository(Player);
+    const registrationsRepo = ds.getRepository(Registration);
+
+    const basePlayerQb = playerRepo.createQueryBuilder("p");
+
+    const playerIdObj = await params;
+    let playerId = Number(playerIdObj.player_id);
+
+    const player = await basePlayerQb
+        .where("p.id = :id", {id: playerId})
+        .getOne();
 
     if (!player) {
         notFound();
     }
 
-    const isExpired =
-        player.uscf_expiration && new Date(player.uscf_expiration) < new Date();
+    const upcomingTournaments = await registrationsRepo
+        .createQueryBuilder("r")
+        .leftJoin("r.tournament", "t")
+        .leftJoin("r.section", "s")
+        .where("r.player_id = :id", {id: playerId})
+        .andWhere("t.start_date >= :now", {now: new Date()})
+        .groupBy("t.id")
+        .orderBy("t.start_date", "ASC")
+        .getMany();
 
-    // Mock tournaments data
-    const upcomingTournaments = await db("tournaments as t")
-        .join("sections as s", "t.tournament_id", "s.tournament_id")
-        .join("section_players as sp", "s.section_id", "sp.section_id")
-        .select(
-            "t.tournament_id as id",
-            "t.name",
-            "t.start_date as date",
-            "t.location",
-            db.raw("'Registered' as status")
-        )
-        .where("sp.player_id", player_id)
-        .andWhere("t.start_date", ">=", new Date())
-        .groupBy("t.tournament_id") // Add groupBy to ensure unique tournaments
-        .orderBy("t.start_date", "asc");
-
-    const pastTournaments = await db("tournaments as t")
-        .join("sections as s", "t.tournament_id", "s.tournament_id")
-        .join("section_players as sp", "s.section_id", "sp.section_id")
-        .select(
-            "t.tournament_id as id",
-            "t.name",
-            "t.start_date as date",
-            db.raw("'N/A' as result"), // Placeholder as games aggregation is complex without dedicated view
-            db.raw("'N/A' as standing")
-        )
-        .where("sp.player_id", player_id)
-        .andWhere("t.start_date", "<", new Date())
-        .groupBy("t.tournament_id") // Add groupBy here too
-        .orderBy("t.start_date", "desc");
+    const pastTournaments = await registrationsRepo
+        .createQueryBuilder("r")
+        .leftJoin("r.tournament", "t")
+        .leftJoin("r.section", "s")
+        .where("r.player_id = :id", {id: playerId})
+        .andWhere("t.start_date < :now", {now: new Date()})
+        .groupBy("t.id")
+        .orderBy("t.start_date", "DESC")
+        .getMany();
 
     return (
         <AdminPageWrapper>
-            <h1 className="mb-8 text-3xl font-bold text-black dark:text-white">{player.first_name} {player.last_name}</h1>
+            <h1 className="mb-8 text-3xl font-bold text-black dark:text-white">{player.firstName} {player.lastName}</h1>
             <div className="grid gap-8 md:grid-cols-3">
                 {/* Profile Sidebar */}
                 <aside className="md:col-span-1">

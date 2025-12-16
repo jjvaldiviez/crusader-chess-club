@@ -121,26 +121,31 @@ INSERT INTO sections (tournament_id, name) VALUES
 (2, 'K-12 Championship'),
 (2, 'K-5 Beginner');
 
--- Adults (players 1–40) → Open + U1600
-INSERT INTO section_players (section_id, player_id)
-SELECT 1, player_id FROM players WHERE player_id BETWEEN 1 AND 40;
+-- Crusader Winter Open registrations
+INSERT INTO registrations (player_id, tournament_id, section_id) VALUES
+(1, 1, 1),   -- Jacob Harris in Open
+(2, 1, 2),   -- Emily Tran in U1600
+(3, 1, 2),   -- Marcus Lopez in U1600
+(4, 1, 3),   -- Sophia Kim in U1200
+(5, 1, 1),   -- Daniel Reeves in Open
+(6, 1, 3),   -- Ava Patel in U1200
+(7, 1, 2),   -- Liam Bennett in U1600
+(8, 1, 1),   -- Noah Sullivan in Open
+(9, 1, 3),   -- Olivia Morgan in U1200
+(10, 1, 2);  -- Ethan Price in U1600
 
-INSERT INTO section_players (section_id, player_id)
-SELECT 2, player_id FROM players WHERE player_id BETWEEN 1 AND 40;
-
--- Teens (players 41–70) → U1600 + U1200
-INSERT INTO section_players (section_id, player_id)
-SELECT 2, player_id FROM players WHERE player_id BETWEEN 41 AND 70;
-
-INSERT INTO section_players (section_id, player_id)
-SELECT 3, player_id FROM players WHERE player_id BETWEEN 41 AND 70;
-
--- Kids (players 71–100) → K-12 + K-5
-INSERT INTO section_players (section_id, player_id)
-SELECT 4, player_id FROM players WHERE player_id BETWEEN 71 AND 100;
-
-INSERT INTO section_players (section_id, player_id)
-SELECT 5, player_id FROM players WHERE player_id BETWEEN 71 AND 100;
+-- Scholastic Holiday Championship registrations
+INSERT INTO registrations (player_id, tournament_id, section_id) VALUES
+(11, 2, 4),  -- Mia Gonzalez in K-12 Championship
+(12, 2, 4),  -- Lucas Ramirez in K-12 Championship
+(13, 2, 5),  -- Isabella Carter in K-5 Beginner
+(14, 2, 4),  -- Mason Brooks in K-12 Championship
+(15, 2, 5),  -- Charlotte Ward in K-5 Beginner
+(16, 2, 4),  -- Logan Perry in K-12 Championship
+(17, 2, 5),  -- Amelia Foster in K-5 Beginner
+(18, 2, 4),  -- James Howard in K-12 Championship
+(19, 2, 4),  -- Harper Bell in K-12 Championship
+(20, 2, 5);  -- Elijah Cook in K-5 Beginner
 
 -- Open Section (section_id = 1)
 INSERT INTO games (section_id, round_number, white_player_id, black_player_id, result)

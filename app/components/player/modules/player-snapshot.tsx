@@ -1,12 +1,13 @@
 import React from "react";
 import Link from "next/link";
+import {Player} from "@/backend/entity/Player";
 
 interface ProfileSnapshotProps {
-    player: any
+    player: Player
 }
 export function PlayerSnapshot({player}: ProfileSnapshotProps) {
     const isExpired =
-        player.uscf_expiration && new Date(player.uscf_expiration) < new Date();
+        player.uscfExpiration && new Date(player.uscfExpiration) < new Date();
 
     return (
         <div className="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
@@ -14,16 +15,16 @@ export function PlayerSnapshot({player}: ProfileSnapshotProps) {
             <div className="space-y-3 text-sm text-zinc-600 dark:text-zinc-400">
                 <div>
                     <span className="block font-medium text-zinc-900 dark:text-zinc-200">Name</span>
-                    {player.first_name} {player.last_name}
+                    {player.firstName} {player.lastName}
                 </div>
                 <div>
                     <span className="block font-medium text-zinc-900 dark:text-zinc-200">USCF ID</span>
-                    {player.uscf_id ? player.uscf_id : "Not provided"}
+                    {player.uscfId ? player.uscfId : "Not provided"}
                 </div>
                 <div>
                     <span className="block font-medium text-zinc-900 dark:text-zinc-200">USCF Exp</span>
                     <div className="flex items-center gap-2">
-                        {player.uscf_expiration ? new Date(player.uscf_expiration).toLocaleDateString() : "Not provided"}
+                        {player.uscfExpiration ? new Date(player.uscfExpiration).toLocaleDateString() : "Not provided"}
                         {isExpired && (
                             <span className="text-xs bg-red-400 text-white px-2 py-1 rounded-full">Expired</span>
                         )}

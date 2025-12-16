@@ -4,6 +4,7 @@ import { Player } from "./entity/Player";
 import {Tournament} from "@/backend/entity/Tournament";
 import {Section} from "@/backend/entity/Section";
 import {Game} from "@/backend/entity/Game";
+import {Registration} from "@/backend/entity/Registration";
 
 export const AppDataSource = new DataSource({
     type: "mysql",
@@ -14,7 +15,7 @@ export const AppDataSource = new DataSource({
     database: "appdb",
     synchronize: true,
     logging: false,
-    entities: [Player, Tournament, Section, Game],
+    entities: [Player, Tournament, Section, Game,Registration],
     migrations: [],
     subscribers: [],
 });
