@@ -1,24 +1,29 @@
-import {
-    Entity,
-    PrimaryGeneratedColumn,
-    ManyToOne,
-    type Relation,
-} from "typeorm";
-import type { Tournament } from "./Tournament";
-import type { Section } from "./Section";
+import { Entity, ManyToOne, JoinColumn, PrimaryColumn } from "typeorm";
+import type { Relation } from "typeorm";
+import { Tournament } from "./Tournament";
+import { Section } from "./Section";
+import { Player } from "./Player";
 
 @Entity({ name: "registrations" })
 export class Registration {
-    @PrimaryGeneratedColumn({ name: "player_id" })
-    id: number;
+    @PrimaryColumn({ name: "player_id", type: "int" })
+    playerId: number;
 
-    @ManyToOne("Tournament", "registrations", {
-        onDelete: "CASCADE",
-    })
+    @PrimaryColumn({ name: "tournament_id", type: "int" })
+    tournamentId: number;
+
+    @PrimaryColumn({ name: "section_id", type: "int" })
+    sectionId: number;
+
+    @ManyToOne(() => Player, { onDelete: "CASCADE" })
+    @JoinColumn({ name: "player_id", referencedColumnName: "id" })
+    player: Relation<Player>;
+
+    @ManyToOne(() => Tournament, { onDelete: "CASCADE" })
+    @JoinColumn({ name: "tournament_id", referencedColumnName: "id" })
     tournament: Relation<Tournament>;
 
-    @ManyToOne("Section", "registrations", {
-        onDelete: "CASCADE",
-    })
+    @ManyToOne(() => Section, { onDelete: "CASCADE" })
+    @JoinColumn({ name: "section_id", referencedColumnName: "id" })
     section: Relation<Section>;
 }

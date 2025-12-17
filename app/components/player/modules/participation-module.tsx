@@ -3,10 +3,10 @@ import {ParticipationCard} from "@/app/components/player/items/participation_car
 import {Registration} from "@/backend/entity/Registration";
 
 interface ParticipationModuleProps {
-    tournaments: Registration[]
+    registrations: Registration[]
 }
 
-export function ParticipationModule({tournaments}: ParticipationModuleProps) {
+export function ParticipationModule({registrations}: ParticipationModuleProps) {
     return(
         <div>
             <h2 className="mb-4 text-xl font-bold text-black dark:text-white">Past Participation</h2>
@@ -21,9 +21,9 @@ export function ParticipationModule({tournaments}: ParticipationModuleProps) {
                     </tr>
                     </thead>
                     <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 bg-white dark:bg-zinc-900">
-                    {tournaments.map((r: Registration
+                    {registrations.map((r: Registration
                     ) => (
-                        <ParticipationCard key={`past-tournament-${r.id}`} tournament={r}/>
+                        <ParticipationCard key={`past-tournament-${r.playerId}-${r.tournamentId}`} r={r}/>
                     ))}
                     </tbody>
                 </table>

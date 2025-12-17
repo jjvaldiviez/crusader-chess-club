@@ -38,22 +38,20 @@ export default async function DashboardPage(
 
     const upcomingTournaments = await registrationsRepo
         .createQueryBuilder("r")
-        .leftJoin("r.tournament", "t")
-        .leftJoin("r.section", "s")
-        .where("r.player_id = :id", {id: playerId})
-        .andWhere("t.start_date >= :now", {now: new Date()})
-        .groupBy("t.id")
-        .orderBy("t.start_date", "ASC")
+        .leftJoinAndSelect("r.tournament", "t")
+        .leftJoinAndSelect("r.section", "s")
+        .where("r.playerId = :id", {id: playerId})
+        .andWhere("t.startDate >= :now", {now: new Date()})
+        .orderBy("t.startDate", "ASC")
         .getMany();
 
     const pastTournaments = await registrationsRepo
         .createQueryBuilder("r")
-        .leftJoin("r.tournament", "t")
-        .leftJoin("r.section", "s")
-        .where("r.player_id = :id", {id: playerId})
-        .andWhere("t.start_date < :now", {now: new Date()})
-        .groupBy("t.id")
-        .orderBy("t.start_date", "DESC")
+        .leftJoinAndSelect("r.tournament", "t")
+        .leftJoinAndSelect("r.section", "s")
+        .where("r.playerId = :id", {id: playerId})
+        .andWhere("t.startDate < :now", {now: new Date()})
+        .orderBy("t.startDate", "DESC")
         .getMany();
 
     return (
@@ -68,14 +66,14 @@ export default async function DashboardPage(
                 {/* Main Content - Tournaments */}
                 <section className="md:col-span-2 space-y-8">
                     <div>
-                        <UpcomingTournaments upcomingTournaments={ upcomingTournaments}/>
+                        <UpcomingTournaments upcomingRegistrations={ upcomingTournaments}/>
                         <div className="mt-4">
                             <Link href="/registration" className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400">
                                 + Register for a new tournament
                             </Link>
                         </div>
                     </div>
-                    <ParticipationModule tournaments={pastTournaments}/>
+                    <ParticipationModule registrations={pastTournaments}/>
                 </section>
             </div>
         </AdminPageWrapper>

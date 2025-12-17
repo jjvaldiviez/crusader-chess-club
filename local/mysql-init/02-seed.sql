@@ -2,10 +2,10 @@ USE appdb;
 
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE games;
-TRUNCATE TABLE section_players;
 TRUNCATE TABLE sections;
 TRUNCATE TABLE tournaments;
 TRUNCATE TABLE players;
+TRUNCATE TABLE registrations;
 SET FOREIGN_KEY_CHECKS = 1;
 
 INSERT INTO players (first_name, last_name, age, uscf_id, uscf_expiration) VALUES

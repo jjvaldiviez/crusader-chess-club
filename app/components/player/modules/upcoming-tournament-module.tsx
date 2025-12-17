@@ -2,17 +2,17 @@ import React from "react";
 import {Registration} from "@/backend/entity/Registration";
 
 interface UpcomingTournamentModuleProps {
-    upcomingTournaments: Registration[]
+    upcomingRegistrations: Registration[]
 }
-export function UpcomingTournaments({upcomingTournaments}: UpcomingTournamentModuleProps) {
+export function UpcomingTournaments({upcomingRegistrations}: UpcomingTournamentModuleProps) {
     return (
         <div>
             <h2 className="mb-4 text-xl font-bold text-black dark:text-white">Upcoming Tournaments</h2>
-            {upcomingTournaments.length > 0 ? (
+            {upcomingRegistrations.length > 0 ? (
                 <div className="flex flex-col gap-4">
-                    {upcomingTournaments.map((r : Registration) => (
+                    {upcomingRegistrations.map((r : Registration) => (
                         <div
-                            key={`upcoming-tournament-${r.id}`}
+                            key={`upcoming-tournament-${r.playerId}-${r.tournamentId}`}
                             className="flex items-center justify-between rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
                         >
                             <div>
