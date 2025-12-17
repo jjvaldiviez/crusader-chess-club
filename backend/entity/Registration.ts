@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, JoinColumn, PrimaryColumn } from "typeorm";
+import {Entity, ManyToOne, JoinColumn, PrimaryColumn, Column} from "typeorm";
 import type { Relation } from "typeorm";
 import { Tournament } from "./Tournament";
 import { Section } from "./Section";
@@ -14,6 +14,12 @@ export class Registration {
 
     @PrimaryColumn({ name: "section_id", type: "int" })
     sectionId: number;
+
+    @Column({name: "created_at", type: "timestamp"})
+    createdAt: Date;
+
+    @Column({name: "updated_at", type: "timestamp"})
+    updatedAt: Date;
 
     @ManyToOne(() => Player, { onDelete: "CASCADE" })
     @JoinColumn({ name: "player_id", referencedColumnName: "id" })

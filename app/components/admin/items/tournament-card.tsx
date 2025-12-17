@@ -1,29 +1,30 @@
 import React from "react";
+import {Registration} from "@/backend/entity/Registration";
 
 interface TournamentViewProps {
-    tournament: any
+    r: Registration | null
 }
 
-export function TournamentCard({tournament}: TournamentViewProps) {
+export function TournamentCard({r}: TournamentViewProps) {
     return (
-        tournament ? (
+        r ? (
             <div className="space-y-2">
                 <h4 className="text-xl font-bold text-primary">
-                    {tournament.name}
+                    {r.tournament.name}
                 </h4>
                 <div className="text-sm text-gray-600 space-y-1">
                     <p>
                         📅{" "}
-                        {tournament.start_date
-                            ? new Date(tournament.start_date).toLocaleDateString()
+                        {r.tournament.startDate
+                            ? new Date(r.tournament.startDate).toLocaleDateString()
                             : "TBD"}
                     </p>
-                    <p>📍 {tournament.location || "Online"}</p>
-                    <p>📊 {tournament.section_count} Sections</p>
-                    <p> {tournament.player_count || 0} Registered Players</p>
+                    <p>📍 {r.tournament.location || "Online"}</p>
+                    <p>📊 Sections</p>
+                    <p>  Registered Players</p>
                 </div>
                 <p className="text-sm mt-4 text-gray-500 line-clamp-3">
-                    {tournament.description}
+                    {r.tournament.description || "No description provided."}{" "}
                 </p>
             </div>
         ) : (

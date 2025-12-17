@@ -33,6 +33,8 @@ CREATE TABLE registrations (
        player_id INT,
        tournament_id INT,
        section_id INT,
+       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
        FOREIGN KEY (player_id) REFERENCES players(player_id),
        FOREIGN KEY (tournament_id) REFERENCES tournaments(tournament_id),
        FOREIGN KEY (section_id) REFERENCES sections(section_id)

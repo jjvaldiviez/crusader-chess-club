@@ -1,31 +1,27 @@
 import { AdminPageWrapper } from "../components/admin/admin-page-wrapper";
 import db from "@/lib/server/db";
 import {PlayerCard} from "@/app/components/admin/items/player-card";
-import {TournamentCard} from "@/app/components/admin/items/tournament-card"; // <-- your knex instance
+import {TournamentCard} from "@/app/components/admin/items/tournament-card";
+import {getAppDataSource} from "@/backend/data-source";
+import {Registration} from "@/backend/entity/Registration"; // <-- your knex instance
 
 export default async function AdminPage() {
+
+    const ds = await getAppDataSource();
+    const registrationsRepo = ds.getRepository(Registration);
     // Get 5 most recent players
     const recentPlayers = await db("players")
         .select("*")
         .orderBy("player_id", "desc")
         .limit(5);
 
-    const upcomingTournament = await db("tournaments as t")
-        .leftJoin("sections as s", "t.tournament_id", "s.tournament_id")
-        .leftJoin("section_players as sp", "s.section_id", "sp.section_id")
-        .select(
-            "t.tournament_id",
-            "t.name",
-            "t.location",
-            "t.description",
-            "t.start_date",
-            db.raw("COUNT(DISTINCT s.section_id) as section_count"),
-            db.raw("COUNT(DISTINCT sp.player_id) as player_count")
-        )
-        .where("t.start_date", ">=", new Date())
-        .groupBy("t.tournament_id")
-        .orderBy("t.start_date", "asc")
-        .first();
+    const upcomingTournament = await registrationsRepo
+        .createQueryBuilder("r")
+        .leftJoinAndSelect("r.tournament", "t")
+        .leftJoinAndSelect("r.section", "s")
+        .andWhere("t.startDate >= :now", {now: new Date()})
+        .orderBy("t.startDate", "ASC")
+        .getOne();
 
     return (
         <AdminPageWrapper>
@@ -61,7 +57,7 @@ export default async function AdminPage() {
                         <h3 className="text-lg font-semibold leading-none tracking-tight mb-4">
                             Upcoming Tournament
                         </h3>
-                        <TournamentCard tournament={upcomingTournament}/>
+                        <TournamentCard r={upcomingTournament}/>
                     </div>
                 </div>
             </div>
