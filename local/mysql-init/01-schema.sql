@@ -1,14 +1,22 @@
 -- Select the database created by docker-compose
 USE appdb;
-
+-- Each user has a password.
+CREATE TABLE users (
+     user_id INT AUTO_INCREMENT PRIMARY KEY,
+     email VARCHAR(50) UNIQUE,
+     password VARCHAR(255),
+     role VARCHAR(50) DEFAULT 'USER'
+);
 -- Each player has unique identifiers and membership info.
 CREATE TABLE players (
      player_id INT AUTO_INCREMENT PRIMARY KEY,
+     user_id INT,
      first_name VARCHAR(50),
      last_name VARCHAR(50),
      age INT,
      uscf_id VARCHAR(20) UNIQUE,
-     uscf_expiration DATE
+     uscf_expiration DATE,
+     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 -- A tournament can have multiple sections.
